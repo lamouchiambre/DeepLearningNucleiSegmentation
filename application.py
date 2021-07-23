@@ -1,19 +1,18 @@
 import tkinter as tk
 from tkinter.constants import ACTIVE, DISABLED
 
-import PIL
+# import PIL
 from PIL import Image
 from PIL import ImageFilter, ImageTk, ImageDraw, ImageStat
 import numpy as np
 
 from tkinter.filedialog import *
-# from test import *
 from tensor import *
 from PIL import Image
 
 import cv2
 
-list_masque = ["UNET", "autre", "autre"]
+
 
 def write_array_masck(p):
     tab = []
@@ -70,29 +69,27 @@ class Application(tk.Frame):
         menubar = tk.Menu(self.master)
 
         menu1 = tk.Menu(menubar, tearoff=0)
-        menu1.add_command(label="Ouvir image", command=self.open_img)
-        menu1.add_separator()
+        menu1.add_command(label="Ouvrir image", command=self.open_img)
+       
+
         menu1.add_command(label="Quitter", command=self.master.quit)
         menubar.add_cascade(label="Fichier", menu=menu1)
 
         self.menu2 = tk.Menu(menubar, tearoff=0)
-        self.menu2.add_command(label="predition",state=DISABLED, command=self.print_prediction)
-        # self.menu2.add_command(label="test", command=self.test)
-
+        self.menu2.add_command(label="U-net",state=DISABLED, command=self.print_prediction)
+        self.menu2.add_separator()
         self.menu2.add_command(label="enregistrer prediction", command=self.register_pred)
-        # menu2.add_command(label="Coller", command=self.print_pred) , state=DISABLED
-        menubar.add_cascade(label="Editer", menu=self.menu2)
+        menubar.add_cascade(label="Segmentation", menu=self.menu2)
 
         menu3 = tk.Menu(menubar, tearoff=0)
         menu3.add_command(label="A propos", command=None)
-        # menubar.add_cascade(label="Aide", menu=menu3)
 
         # .edit.entryconfig(0, state = ACTIVE)
 
         self.master.config(menu=menubar)
 
     def register_pred(self):
-        name_mask = self.name + "_mask.tif"
+        name_mask ="./results/" + self.name + "_mask.tif"
         cv2.imwrite(name_mask, self.p)
 
     def open_img(self):
@@ -108,10 +105,8 @@ class Application(tk.Frame):
         else:
             self.monCanva.delete("all")
 
-        # self.monCanva.setvar("width",1000)
         self.monCanva.create_image(0, 0, image = self.photo, anchor=tk.NW)
-        # self.monCanva.resizable(self.width, self.height)
-        # self.monCanva.create_oval(1,1,width, height, fill = "red")
+
         self.monCanva.image = self.im
         
         self.master.geometry(taille_canvas(self.width, self.height))
